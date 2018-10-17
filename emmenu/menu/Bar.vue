@@ -9,6 +9,7 @@
 <script>
   import hOwnProperty from 'em-underline/hOwnProperty';
   import { getStorage } from '../tools/localstorage';
+  import VueCookies from '../tools/cookie'
   import CONSTANT from './common/constant';
 
   export default {
@@ -20,6 +21,19 @@
           marketing: '营销应用',
           data: '数据中心',
         },
+        barObject:{
+          '控制台': '',
+          '报名':  '',
+          '票务': '/overview',
+          '表单': '',
+          '店铺': '/list',
+          '营销': '/salespromotion',
+          '会员': '/list',
+          '数据': '/mobileanalyze',
+          '财务': '/overview',
+          '周边': '/list',
+          '订单': '/allorder',
+        },
         barData: [],
         curName: '',
       };
@@ -30,6 +44,7 @@
       name: String,
     },
     mounted() {
+      window.$cookie = VueCookies;
       this.modifyAttr('barStatus', this.status);
       this.modifyAttr('barData', this.data, typeof this.data === 'string');
       this.modifyAttr('curName', this.name);
@@ -52,8 +67,20 @@
           this.curBarObject = item.name;
           if (typeof window !== 'undefined') {
             if (hOwnProperty(item, 'url')) {
+              if (this.barObject[item.name]) {
+                let activeBarUrl = this.barObject[item.name];
+                window.$cookie.set("ACTIVEBARURL", activeBarUrl);
+              }else{
+                window.$cookie.set("ACTIVEBARURL", item.url);
+              }
               window.open(item.url);
             } else {
+              if (this.barObject[item.name]) {
+                let activeBarUrl = this.barObject[item.name];
+                window.$cookie.set("ACTIVEBARURL", activeBarUrl);
+              } else {
+                window.$cookie.set("ACTIVEBARURL", item.path);
+              }
               window.location.href = item.path;
             }
           }

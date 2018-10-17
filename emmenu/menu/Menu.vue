@@ -1,6 +1,6 @@
 <template>
   <div class="w-menu" :class="{[`${prefix}-menu`]: !!prefix}" ref="menu"
-  @mouseleave="hideTime()">
+       @mouseleave="hideTime()">
     <div class="w-menu-main">
       <h3 class="w-menu-header" :class="{'w-menu-header-on': curMenuObject === header.name}">
         <div class="w-menu-header-link" @click="goToPath(header)">
@@ -54,6 +54,7 @@
   import ajax from '../tools/ajax';
   import newRoot from '../tools/newRoot';
   import { setStorage } from '../tools/localstorage';
+  import VueCookies from '../tools/cookie'
   import menuMessage from './component/message/index';
   import bar from './Bar';
   import development from '../menu/common/development';
@@ -82,6 +83,19 @@
           marketing: 'yx',
           member: 'hy',
           shop: 'dp',
+        },
+        barObject:{
+          '控制台':`${development[this.processEnv].account}`,
+          '报名': `${development[this.processEnv].activity}`,
+          '票务': `${development[this.processEnv].event}overview`,
+          '表单': `${development[this.processEnv].form}`,
+          '店铺': `${development[this.processEnv].shop}list`,
+          '营销': `${development[this.processEnv].account}salespromotion`,
+          '会员': `${development[this.processEnv].member}list`,
+          '数据': `${development[this.processEnv].data}mobileanalyze`,
+          '财务': `${development[this.processEnv].finance}overview`,
+          '周边': `${development[this.processEnv].goods}list`,
+          '订单': `${development[this.processEnv].order}allorder`,
         },
         curMenuObject: '',
         curBarObject: '',
@@ -127,6 +141,7 @@
       },
     },
     mounted() {
+      window.$cookie = VueCookies;
       this.updateBarMode(this.hideBarName);
       this.headers = Object.assign({}, this.ajaxHeaders);
       if (this.mode === 'handle') {
@@ -134,6 +149,10 @@
       } else {
         this.getMenu();
       }
+      if (!window.$cookie.get("CURMENUNAME")) {
+        window.$cookie.set("CURMENUNAME", '控制台');
+      }
+      this.curMenuObject = window.$cookie.get("CURMENUNAME");
     },
     methods: {
       handleData() {
@@ -175,9 +194,8 @@
         const shopSource = this.menusData.marketingauth[ALIASES.SHOP];
         const shopAuth = shopSource.is_auth ? shopSource.is_auth : 0;
         const shopLink = shopAuth ? development[this.processEnv].shop : this.pathNoAuth;
-
         // 处理店铺
-        const curObject = {
+        let curObject = {
           name: '店铺',
           icon: this.iconObj.shop,
           path: shopLink,
@@ -215,7 +233,7 @@
         setStorage(DATA_BAR, this.dataBar.slice().map(item => JSON.stringify(item)).join(',,'));
         this.$emit('getAllData', this.menusData);
         // 检测匹配
-        this.matchUrl();
+        //this.matchUrl();
       },
       // 如果直接按浏览器返回按钮，状态会失效
       matchUrl() {
@@ -228,7 +246,6 @@
         if (inSite.length === 0) {
           inSite = href.indexOf(this.header.path) > -1 ? [this.header] : [];
         }
-
         this.curMenuObject = inSite.length > 0 ? inSite[0].name : '';
         // 如果一级 不带有 bar 菜单中并未匹配到
         // 匹配营销
@@ -258,7 +275,10 @@
             return;
           }
           this.curMenuObject = item.name;
+          window.$cookie.set("CURMENUNAME", item.name);
           if (typeof window !== 'undefined') {
+            let activeBarUrl = this.barObject[item.name];
+            window.$cookie.set("ACTIVEBARURL", activeBarUrl);
             if (item.name === '会员') {
               window.open(item.path);
             } else {
@@ -274,7 +294,10 @@
             return;
           }
           this.curMenuObject = item.name;
+          window.$cookie.set("CURMENUNAME", item.name);
           if (typeof window !== 'undefined') {
+            let activeBarUrl = this.barObject[item.name];
+            window.$cookie.set("ACTIVEBARURL", activeBarUrl);
             window.open(item.url);
           }
         }
@@ -284,15 +307,17 @@
           window.open(item.path);
           return;
         }
-        if (this.hideBarName !== item.name) {
-          let newItem = null;
-          if (item.source.module_name === MODULE_NAME.MARKET) {
-            newItem = this.marketBar;
-          } else {
-            newItem = this.dataBar;
-          }
-          window.location.href = newItem[0].path;
+        let newItem = null;
+        this.curMenuObject = item.name;
+        window.$cookie.set("CURMENUNAME", item.name);
+        if (item.source.module_name === MODULE_NAME.MARKET) {
+          newItem = this.marketBar;
+        } else {
+          newItem = this.dataBar;
         }
+        let activeBarUrl = this.barObject[item.name];
+        window.$cookie.set("ACTIVEBARURL", activeBarUrl);
+        window.location.href = newItem[0].path;
       },
       showTime(item) {
         if (this.hideBarName !== item.name) {
