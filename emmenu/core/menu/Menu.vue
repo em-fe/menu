@@ -5,9 +5,33 @@
         <img class="w-menu-header-icon" :src="power.logo" @error="errorFn">
         <a :href="`${env.ACCOUNT||env.VUE_APP_ACCOUNT}accountinformation`" target="_blank" class="w-menu-header-title">{{power.title}}</a>
       </div>
-      <ul class="w-menu-list">
-        <li class="w-menu-list-item" v-for="(rule, ruleIndex) in power.menuList" :key="ruleIndex">
+      <ul class="w-menu-list" v-if="listHome.length">
+        <li class="w-menu-list-item" v-for="(rule, ruleIndex) in listHome" :key="ruleIndex">
           <!-- on -->
+          <a href="javascript:;" class="w-menu-list-link" :class="{on: activeValue === rule.icon}" @click="goPath(rule)">
+            <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_normal.png`)">
+            <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_selected.png`)">
+            <span class="w-menu-list-title">
+              <span class="w-menu-list-title-inner">{{rule.name}}</span>
+              <i class="w-menu-tag" v-if="rule.tags.length > 0">{{rule.tags[0]}}</i>
+            </span>
+          </a>
+        </li>
+      </ul>
+      <ul class="w-menu-list" v-if="listShop.length">
+        <li class="w-menu-list-item" v-for="(rule, ruleIndex) in listShop" :key="ruleIndex">
+          <a href="javascript:;" class="w-menu-list-link" :class="{on: activeValue === rule.icon}" @click="goPath(rule)">
+            <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_normal.png`)">
+            <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_selected.png`)">
+            <span class="w-menu-list-title">
+              <span class="w-menu-list-title-inner">{{rule.name}}</span>
+              <i class="w-menu-tag" v-if="rule.tags.length > 0">{{rule.tags[0]}}</i>
+            </span>
+          </a>
+        </li>
+      </ul>
+      <ul class="w-menu-list margin0" v-if="listOrder.length">
+        <li class="w-menu-list-item" v-for="(rule, ruleIndex) in listOrder" :key="ruleIndex">
           <a href="javascript:;" class="w-menu-list-link" :class="{on: activeValue === rule.icon}" @click="goPath(rule)">
             <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_normal.png`)">
             <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_selected.png`)">
@@ -89,6 +113,9 @@
         modalShow: false,
         callbackUrl: [],
         power: {},
+        listHome: [],
+        listShop: [],
+        listOrder: [],
       };
     },
     props: {
@@ -121,6 +148,19 @@
       // 处理权限接口数据
       handleData() {
         this.power = newRoot(this.rule, this.env);
+
+        const menuFirstBlock = ['home', 'event', 'meetup', 'form', 'goods'];
+        const menuTwoBlock = ['shop', 'marketing', 'distribution', 'member'];
+        const menuThreeBlock = ['data', 'order', 'finance'];
+        this.power.menuList.forEach((item) => {
+          if (menuFirstBlock.includes(item.icon)) {
+            this.listHome.push(item);
+          } else if (menuTwoBlock.includes(item.icon)) {
+            this.listShop.push(item);
+          } else if (menuThreeBlock.includes(item.icon)) {
+            this.listOrder.push(item);
+          }
+        });
         this.$emit('analysised', this.power);
       },
       goPath(rule) {
@@ -190,7 +230,7 @@
         window.$cookie.remove(CONSTANT.EVENT_USER);
         // 不加定时器，登录cookie还在
         setTimeout(() => {
-          window.location.href = `${this.env.ACCOUNT||this.env.VUE_APP_ACCOUNT}login`;
+          window.location.href = `${this.env.ACCOUNT || this.env.VUE_APP_ACCOUNT}login`;
         }, 0);
       },
       // 免费发活动和退出 end

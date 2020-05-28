@@ -23,5 +23,6 @@ export default {
     DATA: 'data',
     SHOP: 'shop', // 店铺
     CRM: 'crm',
+    DISTRIBUTION: 'distribution',
   },
 };

@@ -61,6 +61,11 @@ $menu-bg: #252a2e;
     padding: 0;
     max-height: 504px;
     overflow: auto;
+    margin-bottom: 20px;
+
+    &.margin0 {
+      margin-bottom: 0;
+    }
 
     &-link {
       display: flex;

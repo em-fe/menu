@@ -31,12 +31,12 @@ export default (rule, env) => {
         // 如果是引导升级版本
         if (!kid.is_accessible && options.denied_type === 'buy_editions') {
           kid.isBuyEditions = true;
-          kid.authPath = `${env.ACCOUNT||env.VUE_APP_ACCOUNT}service/intro`;
+          kid.authPath = `${env.ACCOUNT || env.VUE_APP_ACCOUNT}service/intro`;
         }
         // 如果是引导升级版本
         if (!kid.is_accessible && options.denied_type === 'buy_functions') {
           kid.isBuyFunctions = true;
-          kid.authPath = `${env.ACCOUNT||env.VUE_APP_ACCOUNT}service/helper/${kid[code]}`;
+          kid.authPath = `${env.ACCOUNT || env.VUE_APP_ACCOUNT}service/helper/${kid[code]}`;
         }
         kidKeys[kid[code]] = kid;
         handleReduce(item, kid);
