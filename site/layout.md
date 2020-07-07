@@ -61,7 +61,7 @@ export default {
 
 .demo {
   position: relative;
-  height: 710px;
+  height: 610px;
   border: 1px solid #dcdcdc;
   border-left: none;
 

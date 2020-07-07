@@ -5,54 +5,57 @@
         <img class="w-menu-header-icon" :src="power.logo" @error="errorFn">
         <a :href="`${env.ACCOUNT||env.VUE_APP_ACCOUNT}accountinformation`" target="_blank" class="w-menu-header-title">{{power.title}}</a>
       </div>
-      <ul class="w-menu-list" v-if="listHome.length">
-        <li class="w-menu-list-item" v-for="(rule, ruleIndex) in listHome" :key="ruleIndex">
-          <!-- on -->
-          <a href="javascript:;" class="w-menu-list-link" :class="{on: activeValue === rule.icon}" @click="goPath(rule)">
-            <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_normal.png`)">
-            <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_selected.png`)">
-            <span class="w-menu-list-title">
-              <span class="w-menu-list-title-inner">{{rule.name}}</span>
-              <i class="w-menu-tag" v-if="rule.tags.length > 0">{{rule.tags[0]}}</i>
-            </span>
-          </a>
-        </li>
-      </ul>
-      <ul class="w-menu-list" v-if="listShop.length">
-        <li class="w-menu-list-item" v-for="(rule, ruleIndex) in listShop" :key="ruleIndex">
-          <a href="javascript:;" class="w-menu-list-link" :class="{on: activeValue === rule.icon}" @click="goPath(rule)">
-            <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_normal.png`)">
-            <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_selected.png`)">
-            <span class="w-menu-list-title">
-              <span class="w-menu-list-title-inner">{{rule.name}}</span>
-              <i class="w-menu-tag" v-if="rule.tags.length > 0">{{rule.tags[0]}}</i>
-            </span>
-          </a>
-        </li>
-      </ul>
-      <ul class="w-menu-list margin0" v-if="listOrder.length">
-        <li class="w-menu-list-item" v-for="(rule, ruleIndex) in listOrder" :key="ruleIndex">
-          <a href="javascript:;" class="w-menu-list-link" :class="{on: activeValue === rule.icon}" @click="goPath(rule)">
-            <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_normal.png`)">
-            <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_selected.png`)">
-            <span class="w-menu-list-title">
-              <span class="w-menu-list-title-inner">{{rule.name}}</span>
-              <i class="w-menu-tag" v-if="rule.tags.length > 0">{{rule.tags[0]}}</i>
-            </span>
-          </a>
-        </li>
-      </ul>
-      <!-- <a href="javascript:;" class="w-menu-release" @click="isMask = true"> -->
-        <a class="w-menu-release"
-         target="_blank" :href="`${env.EVENT||env.VUE_APP_EVENT}checktmodal`">
-        <img class="w-menu-release-img" :src="require(`assets/img/release.png`)">
-        <span class="w-menu-release-title">免费发活动</span>
-      </a>
-      <a class="w-menu-quit" @click="modalShow = true">
-        <img class="w-menu-quit-img" :src="require(`assets/img/quit.png`)">
-        <img class="w-menu-quit-img" :src="require(`assets/img/quit_hover.png`)">
-        <span class="w-menu-quit-title">退出</span>
-      </a>
+      <div class="w-menu-cont">
+        <ul class="w-menu-list" v-if="listHome.length">
+          <li class="w-menu-list-item" v-for="(rule, ruleIndex) in listHome" :key="ruleIndex">
+            <!-- on -->
+            <a href="javascript:;" class="w-menu-list-link" :class="{on: activeValue === rule.icon}" @click="goPath(rule)">
+              <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_normal.png`)">
+              <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_selected.png`)">
+              <span class="w-menu-list-title">
+                <span class="w-menu-list-title-inner">{{rule.name}}</span>
+                <i class="w-menu-tag" v-if="rule.tags.length > 0">{{rule.tags[0]}}</i>
+              </span>
+            </a>
+          </li>
+        </ul>
+        <ul class="w-menu-list" v-if="listShop.length">
+          <li class="w-menu-list-item" v-for="(rule, ruleIndex) in listShop" :key="ruleIndex">
+            <a href="javascript:;" class="w-menu-list-link" :class="{on: activeValue === rule.icon}" @click="goPath(rule)">
+              <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_normal.png`)">
+              <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_selected.png`)">
+              <span class="w-menu-list-title">
+                <span class="w-menu-list-title-inner">{{rule.name}}</span>
+                <i class="w-menu-tag" v-if="rule.tags.length > 0">{{rule.tags[0]}}</i>
+              </span>
+            </a>
+          </li>
+        </ul>
+        <ul class="w-menu-list margin0" v-if="listOrder.length">
+          <li class="w-menu-list-item" v-for="(rule, ruleIndex) in listOrder" :key="ruleIndex">
+            <a href="javascript:;" class="w-menu-list-link" :class="{on: activeValue === rule.icon}" @click="goPath(rule)">
+              <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_normal.png`)">
+              <img class="w-menu-list-img" :src="require(`assets/img/${rule.icon}_selected.png`)">
+              <span class="w-menu-list-title">
+                <span class="w-menu-list-title-inner">{{rule.name}}</span>
+                <i class="w-menu-tag" v-if="rule.tags.length > 0">{{rule.tags[0]}}</i>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="w-menu-footer">
+        <!-- <a href="javascript:;" class="w-menu-release" @click="isMask = true"> -->
+        <a class="w-menu-release" target="_blank" :href="`${env.EVENT||env.VUE_APP_EVENT}checktmodal`">
+          <img class="w-menu-release-img" :src="require(`assets/img/release.png`)">
+          <span class="w-menu-release-title">免费发活动</span>
+        </a>
+        <a class="w-menu-quit" @click="modalShow = true">
+          <img class="w-menu-quit-img" :src="require(`assets/img/quit.png`)">
+          <img class="w-menu-quit-img" :src="require(`assets/img/quit_hover.png`)">
+          <span class="w-menu-quit-title">退出</span>
+        </a>
+      </div>
     </div>
     <!-- 免费发活动 start -->
     <div v-if="isMask" class="w-menu-mask">
@@ -178,7 +181,8 @@
       // 免费发活动和退出 start
       modalOk() {
         this.modalShow = false;
-        this.goOut();
+        // this.goOut();
+        this.logoutSuc();
       },
       goOut() {
         ajax({
